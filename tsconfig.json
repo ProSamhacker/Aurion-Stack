@@ -38,6 +38,7 @@
   "exclude": [
     "node_modules",
     "**/*.spec.ts",
-    "playwright-fixture.ts"
+    "playwright-fixture.ts",
+    "playwright.config.ts"
   ]
 }
