@@ -1,13 +1,19 @@
 {
   "/_global-error/page": "app/_global-error/page.js",
   "/_not-found/page": "app/_not-found/page.js",
+  "/api/contact/route": "app/api/contact/route.js",
   "/auraiq/page": "app/auraiq/page.js",
   "/businesszip/page": "app/businesszip/page.js",
   "/gaptuber/page": "app/gaptuber/page.js",
   "/insights/page": "app/insights/page.js",
   "/page": "app/page.js",
   "/pricing/page": "app/pricing/page.js",
+  "/privacy/page": "app/privacy/page.js",
+  "/robots.txt/route": "app/robots.txt/route.js",
   "/services/page": "app/services/page.js",
+  "/sitemap.xml/route": "app/sitemap.xml/route.js",
   "/solutions/[slug]/page": "app/solutions/[slug]/page.js",
+  "/solutions/page": "app/solutions/page.js",
+  "/terms/page": "app/terms/page.js",
   "/visioscript/page": "app/visioscript/page.js"
 }

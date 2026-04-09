@@ -1,3 +1,0 @@
-module.exports=[35647,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(90049);a.n(d("[project]/Desktop/WEBSITE/Aurion Stack/node_modules/next/dist/client/components/builtin/global-error.js <module evaluation>"))},79969,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(90049);a.n(d("[project]/Desktop/WEBSITE/Aurion Stack/node_modules/next/dist/client/components/builtin/global-error.js"))},85367,a=>{"use strict";a.i(35647);var b=a.i(79969);a.n(b)},94440,a=>{a.n(a.i(85367))}];
-
-//# sourceMappingURL=0qbm_next_dist_client_components_builtin_global-error_12cck9z.js.map
