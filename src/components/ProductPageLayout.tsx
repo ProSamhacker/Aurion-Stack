@@ -1,7 +1,9 @@
-import React, { useEffect } from "react";
-import { Check, ArrowRight, ChevronLeft } from "lucide-react";
-import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+"use client";
+
+import React, { useEffect, useState } from "react";
+import { Check, ArrowRight, ChevronLeft, ChevronDown } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 import {
   Drawer,
   DrawerClose,
@@ -38,6 +40,16 @@ interface ProductTestimonial {
   role: string;
 }
 
+interface Faq {
+  q: string;
+  a: string;
+}
+
+interface RelatedSolution {
+  label: string;
+  href: string;
+}
+
 export interface ProductPageLayoutProps {
   productName: string;
   heroHeadline: string;
@@ -48,6 +60,8 @@ export interface ProductPageLayoutProps {
   pricing: ProductPricing[];
   steps?: ProductStep[];
   testimonials?: ProductTestimonial[];
+  faqs?: Faq[];
+  relatedSolutions?: RelatedSolution[];
 }
 
 const defaultSteps: ProductStep[] = [
@@ -72,7 +86,10 @@ const ProductPageLayout: React.FC<ProductPageLayoutProps> = ({
   pricing,
   steps = defaultSteps,
   testimonials = defaultTestimonials,
+  faqs,
+  relatedSolutions,
 }) => {
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -81,18 +98,19 @@ const ProductPageLayout: React.FC<ProductPageLayoutProps> = ({
     <div className="min-h-screen bg-background flex flex-col selection:bg-primary/30">
 
       {/* ── Minimal product header ── */}
-      <header className="sticky top-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-xl px-6 py-4">
-        <div className="container mx-auto flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+      <header className="sticky top-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-xl">
+        <div className="mx-auto flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 max-w-6xl">
+          <Link href="/" className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors shrink-0">
             <ChevronLeft size={15} />
-            Aurion Stack
+            <span className="hidden xs:inline">Aurion Stack</span>
+            <span className="xs:hidden">Back</span>
           </Link>
-          <span className="text-sm font-bold text-foreground tracking-tight">{productName}</span>
+          <span className="text-sm font-bold text-foreground tracking-tight px-3 line-clamp-1">{productName}</span>
           <a
             href={ctaLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-md bg-foreground px-4 py-2 text-xs font-semibold text-background transition-all hover:scale-[1.02] hover:bg-foreground/90"
+            className="shrink-0 rounded-md bg-foreground px-4 py-2 text-xs font-semibold text-background transition-all hover:scale-[1.02] hover:bg-foreground/90"
           >
             {ctaText}
           </a>
@@ -287,6 +305,100 @@ const ProductPageLayout: React.FC<ProductPageLayoutProps> = ({
         </div>
       </section>
 
+      {/* ── FAQ Section ── */}
+      {faqs && faqs.length > 0 && (
+        <section className="py-16 px-4 border-t border-border">
+          {/* FAQPage JSON-LD schema */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                mainEntity: faqs.map(({ q, a }) => ({
+                  "@type": "Question",
+                  name: q,
+                  acceptedAnswer: { "@type": "Answer", text: a },
+                })),
+              }),
+            }}
+          />
+          <div className="container mx-auto max-w-3xl">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="mb-10 text-center"
+            >
+              <span className="inline-block text-[10px] font-bold uppercase tracking-widest text-primary mb-3">FAQ</span>
+              <h2 className="text-2xl md:text-4xl font-heading font-normal tracking-tight text-foreground">
+                Common questions answered.
+              </h2>
+            </motion.div>
+            <div className="space-y-2">
+              {faqs.map((faq, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.3, delay: i * 0.04 }}
+                  className="rounded-xl border border-border overflow-hidden"
+                >
+                  <button
+                    onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                    className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left bg-card/40 hover:bg-card/70 transition-colors"
+                    aria-expanded={openFaq === i}
+                  >
+                    <span className="text-sm font-semibold text-foreground">{faq.q}</span>
+                    <ChevronDown
+                      size={16}
+                      className={`text-muted-foreground flex-shrink-0 transition-transform duration-200 ${openFaq === i ? 'rotate-180' : ''}`}
+                    />
+                  </button>
+                  <AnimatePresence initial={false}>
+                    {openFaq === i && (
+                      <motion.div
+                        key="answer"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.2, ease: 'easeInOut' }}
+                        className="overflow-hidden"
+                      >
+                        <p className="px-5 pb-4 text-sm text-muted-foreground leading-relaxed">{faq.a}</p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── Related Solutions ── */}
+      {relatedSolutions && relatedSolutions.length > 0 && (
+        <section className="py-10 px-4 border-t border-border bg-muted/5">
+          <div className="container mx-auto max-w-3xl">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-5">Related Solutions</p>
+            <div className="flex flex-wrap gap-3">
+              {relatedSolutions.map((s) => (
+                <Link
+                  key={s.href}
+                  href={s.href}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-border px-4 py-2 text-xs font-medium text-muted-foreground hover:text-foreground hover:border-primary/40 transition-all"
+                >
+                  {s.label}
+                  <ArrowRight size={11} />
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* ── Hard CTA Banner ── */}
       <section className="py-10 sm:py-12 px-4 bg-muted/10">
         <div className="container mx-auto max-w-3xl text-center">
@@ -303,7 +415,7 @@ const ProductPageLayout: React.FC<ProductPageLayoutProps> = ({
               Our agency team handles all configuration, integration, and deployment. You focus on the outcome, not the setup.
             </p>
             <Link
-              to="/#contact"
+              href="/#contact"
               className="inline-flex items-center gap-2 rounded-md border border-border bg-transparent px-8 py-3.5 text-sm font-semibold text-foreground transition-all hover:bg-muted"
             >
               Talk to our team
@@ -319,14 +431,21 @@ const ProductPageLayout: React.FC<ProductPageLayoutProps> = ({
           <p className="text-xs text-muted-foreground">
             © {new Date().getFullYear()} Aurion Stack · Remote-first · Shipping globally
           </p>
-          <div className="flex items-center gap-5">
-            {["Home", "Services", "Pricing", "Contact"].map((l) => (
+          <div className="flex items-center gap-5 flex-wrap justify-center">
+            {[
+              { label: "Home", href: "/" },
+              { label: "Solutions", href: "/solutions" },
+              { label: "Services", href: "/services" },
+              { label: "Pricing", href: "/pricing" },
+              { label: "Privacy", href: "/privacy" },
+              { label: "Contact", href: "/#contact" },
+            ].map((l) => (
               <Link
-                key={l}
-                to={l === "Home" ? "/" : l === "Contact" ? "/#contact" : `/${l.toLowerCase()}`}
+                key={l.label}
+                href={l.href}
                 className="text-xs text-muted-foreground hover:text-foreground transition-colors"
               >
-                {l}
+                {l.label}
               </Link>
             ))}
           </div>

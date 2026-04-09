@@ -1,3 +1,5 @@
+"use client";
+
 import { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Globe, Smartphone, Brain, Layers, ArrowRight } from "lucide-react";

@@ -1,8 +1,11 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ChevronDown, Rocket, Video, Bot, BriefcaseBusiness } from "lucide-react";
 import GapTuberIcon from "@/components/icons/GapTuberIcon";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,9 +32,9 @@ const Navbar = () => {
   const [activeSection, setActiveSection] = useState("");
   const [scrollPct, setScrollPct] = useState(0);
   const [scrolled, setScrolled] = useState(false);
-  const location = useLocation();
-  const navigate = useNavigate();
-  const isHomePage = location.pathname === "/";
+  const pathname = usePathname();
+  const router = useRouter();
+  const isHomePage = pathname === "/";
 
   useEffect(() => {
     const onScroll = () => {
@@ -63,7 +66,7 @@ const Navbar = () => {
   const scrollTo = (href: string) => {
     setMobileOpen(false);
     if (!isHomePage) {
-      navigate("/");
+      router.push("/");
       setTimeout(() => {
         const id = href.slice(1);
         const el = document.getElementById(id);
@@ -142,7 +145,7 @@ const Navbar = () => {
               const isAnchor = link.type === "anchor";
               const isActive = isAnchor
                 ? isHomePage && activeSection === link.href.slice(1)
-                : location.pathname === link.href;
+                : pathname === link.href;
 
               return isAnchor ? (
                 <button
@@ -237,7 +240,7 @@ const Navbar = () => {
                   const isAnchor = link.type === "anchor";
                   const isActive = isAnchor
                     ? isHomePage && activeSection === link.href.slice(1)
-                    : location.pathname === link.href;
+                    : pathname === link.href;
 
                   return isAnchor ? (
                     <button

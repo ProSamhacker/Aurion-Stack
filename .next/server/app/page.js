@@ -1,0 +1,13 @@
+var R=require("../chunks/ssr/[turbopack]_runtime.js")("server/app/page.js")
+R.c("server/chunks/ssr/[root-of-the-server]__0zk1cwt._.js")
+R.c("server/chunks/ssr/0qbm_next_dist_esm_build_templates_app-page_0k.zj3k.js")
+R.c("server/chunks/ssr/[root-of-the-server]__0zzl039._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__0zfyw4b._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__0g3o760._.js")
+R.c("server/chunks/ssr/Desktop_WEBSITE_Aurion Stack_src_app_not-found_tsx_07zu-s7._.js")
+R.c("server/chunks/ssr/0qbm_next_dist_client_components_0heki8.._.js")
+R.c("server/chunks/ssr/0qbm_next_dist_client_components_builtin_unauthorized_03jg3cg.js")
+R.c("server/chunks/ssr/0qbm_next_dist_client_components_builtin_global-error_12cck9z.js")
+R.c("server/chunks/ssr/Desktop_WEBSITE_Aurion Stack__next-internal_server_app_page_actions_0i7rwi8.js")
+R.m(98903)
+module.exports=R.m(98903).exports

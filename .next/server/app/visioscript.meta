@@ -1,0 +1,15 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/visioscript/layout,_N_T_/visioscript/page,_N_T_/visioscript"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/visioscript/__PAGE__",
+    "/visioscript",
+    "/_index",
+    "/_head"
+  ]
+}

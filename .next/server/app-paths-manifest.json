@@ -1,0 +1,13 @@
+{
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/auraiq/page": "app/auraiq/page.js",
+  "/businesszip/page": "app/businesszip/page.js",
+  "/gaptuber/page": "app/gaptuber/page.js",
+  "/insights/page": "app/insights/page.js",
+  "/page": "app/page.js",
+  "/pricing/page": "app/pricing/page.js",
+  "/services/page": "app/services/page.js",
+  "/solutions/[slug]/page": "app/solutions/[slug]/page.js",
+  "/visioscript/page": "app/visioscript/page.js"
+}

@@ -47,7 +47,7 @@ export const organizationSchema = {
   },
   image: "https://aurionstack.dev/aurionstack-logo.webp",
   description:
-    "Aurion Stack is a remote-first product engineering studio specialising in custom web platforms, cross-platform mobile apps, and AI-powered automation solutions for startups and enterprise brands worldwide.",
+    "Build AI support agents, lead-generation systems, and automation workflows that reduce costs and scale operations for global businesses.",
   foundingDate: "2024",
   contactPoint: [
     {
@@ -60,10 +60,14 @@ export const organizationSchema = {
   sameAs: [
     "https://instagram.com/aurionstack",
     "https://github.com/ProSamhacker",
+    "https://linkedin.com/company/aurionstack",
   ],
   // Explicit multi-region service intent — tells Google this is a global entity
   areaServed: ["US", "GB", "AU", "CA", "SG", "AE", "IN"],
   knowsAbout: [
+    "AI Customer Support Automation",
+    "Lead Generation Automation",
+    "Conversion Optimization",
     "React",
     "Next.js",
     "TypeScript",
@@ -87,7 +91,7 @@ export const websiteSchema = {
   url: "https://aurionstack.dev",
   name: "Aurion Stack",
   description:
-    "Full-stack web, mobile & AI development studio — building for global brands.",
+    "Custom AI Agents & Automation for Growing Businesses. We build systems that reduce costs and capture leads.",
   publisher: {
     "@id": "https://aurionstack.dev/#organization",
   },

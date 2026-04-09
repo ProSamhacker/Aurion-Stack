@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -6,7 +8,7 @@ import {
   BriefcaseBusiness, MoveRight
 } from "lucide-react";
 import GapTuberIcon from "@/components/icons/GapTuberIcon";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 
 export const PACKAGES = [
   {
@@ -217,7 +219,7 @@ const PackageModal = ({ pkg, onClose }: { pkg: typeof PACKAGES[0]; onClose: () =
 
 const PricingSection = () => {
   const [selectedPkg, setSelectedPkg] = useState<typeof PACKAGES[0] | null>(null);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   return (
     <>
@@ -387,7 +389,7 @@ const PricingSection = () => {
             className="mt-6 flex justify-center"
           >
             <button
-              onClick={() => navigate("/pricing")}
+              onClick={() => router.push("/pricing")}
               className="group flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
             >
               See full retainer breakdown

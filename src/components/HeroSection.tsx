@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Star, Bot, Video, BriefcaseBusiness } from "lucide-react";
@@ -103,9 +105,8 @@ const HeroSection = () => {
             transition={{ duration: 0.7, delay: 0.1 }}
             className="flex flex-col gap-1.5 font-heading tracking-tight"
           >
-            <span className="text-[3rem] sm:text-5xl md:text-6xl lg:text-[5.5rem] leading-[1.15] text-foreground">
-              AI-Powered SaaS
-              <br className="sm:hidden" /> & Automation.
+            <span className="text-[2.5rem] sm:text-5xl md:text-5xl lg:text-[4.5rem] leading-[1.15] text-foreground text-balance">
+              AI-Powered SaaS & Automation.
             </span>
           </motion.h1>
 
@@ -113,7 +114,7 @@ const HeroSection = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.25 }}
-            className="mx-auto mt-6 w-[90%] sm:w-auto sm:max-w-xl text-base leading-relaxed text-muted-foreground/80 sm:text-lg text-pretty"
+            className="mx-auto mt-6 w-[90%] sm:w-auto sm:max-w-2xl text-base leading-relaxed text-muted-foreground/80 sm:text-lg text-pretty"
           >
             We build custom AI systems and SaaS products that automate manual work and scale your business.
           </motion.p>

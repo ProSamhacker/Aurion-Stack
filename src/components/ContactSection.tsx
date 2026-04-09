@@ -1,5 +1,9 @@
+"use client";
+
 import { motion } from "framer-motion";
-import { Mail, MessageCircle } from "lucide-react";
+import { Mail, MessageCircle, Send, CheckCircle2, Loader2 } from "lucide-react";
+import { useState } from "react";
+import Link from "next/link";
 
 const InstagramIcon = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
@@ -13,83 +17,222 @@ const WhatsappIcon = () => (
   </svg>
 );
 
-const contacts = [
-  {
-    href: "https://wa.me/919322720861",
-    label: "+91 93227 20861",
-    Icon: WhatsappIcon,
-    external: true,
-  },
-  {
-    href: "mailto:aurionstack@gmail.com",
-    label: "aurionstack@gmail.com",
-    Icon: Mail,
-    external: false,
-  },
-  {
-    href: "https://discord.com/users/1222025472142217257",
-    label: "Discord",
-    Icon: MessageCircle,
-    external: true,
-  },
-  {
-    href: "https://instagram.com/aurionstack",
-    label: "@aurionstack",
-    Icon: InstagramIcon,
-    external: true,
-  },
+const quickLinks = [
+  { href: "https://wa.me/919322720861", label: "WhatsApp", Icon: WhatsappIcon, external: true },
+  { href: "mailto:aurionstack@gmail.com", label: "aurionstack@gmail.com", Icon: Mail, external: false },
+  { href: "https://discord.com/users/1222025472142217257", label: "Discord", Icon: MessageCircle, external: true },
+  { href: "https://instagram.com/aurionstack", label: "@aurionstack", Icon: InstagramIcon, external: true },
 ];
 
-const ContactSection = () => {
+const budgets = ["< $1,000", "$1,000 – $5,000", "$5,000 – $15,000", "$15,000+", "Not sure yet"];
+
+export default function ContactSection() {
+  const [form, setForm] = useState({ name: "", email: "", budget: "", message: "" });
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("loading");
+    setErrorMsg("");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Something went wrong.");
+      setStatus("success");
+      setForm({ name: "", email: "", budget: "", message: "" });
+    } catch (err: unknown) {
+      setStatus("error");
+      setErrorMsg(err instanceof Error ? err.message : "Please email us directly.");
+    }
+  };
+
   return (
     <section id="contact" className="relative border-t border-border bg-card py-24 sm:py-32">
       <div className="container mx-auto px-4 sm:px-6">
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl mb-6">
-            Let's Build Something <span className="text-muted-foreground">Great</span>
-          </h2>
-          <p className="text-base text-muted-foreground sm:text-lg mb-6 leading-relaxed">
-            Whether you need a high-performance web app, a cross-platform mobile application,
-            or an AI-powered automation system — we'd love to hear about your project. Aurion Stack
-            works with worldwide brands and fast-growing startups to turn ideas into production-ready
-            digital products.
-          </p>
-          <p className="text-base text-muted-foreground sm:text-lg leading-relaxed mb-12">
-            Drop us a message on WhatsApp for the fastest response, or reach out via email or Discord.
-            We typically reply within 24 hours and offer a free 30-minute discovery call for new projects.
-          </p>
+        <div className="mx-auto max-w-4xl">
 
-          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6 flex-wrap">
-            {contacts.map(({ href, label, Icon, external }) => (
-              <a
-                key={label}
-                href={href}
-                target={external ? "_blank" : undefined}
-                rel={external ? "noopener noreferrer" : undefined}
-                className="group flex w-full items-center justify-center gap-3 rounded-lg border border-border bg-background px-6 py-4 text-sm font-semibold text-foreground transition-all hover:bg-muted hover:border-primary/50 sm:w-auto"
-              >
-                <div className="flex items-center justify-center text-muted-foreground transition-colors group-hover:text-primary">
-                  <Icon />
+          {/* ── Header ── */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <span className="inline-block text-[10px] font-bold uppercase tracking-[0.2em] text-primary mb-4">
+              Get In Touch
+            </span>
+            <h2 className="text-3xl font-heading font-normal tracking-tight text-foreground sm:text-5xl mb-6">
+              Let's Build Something <span className="text-muted-foreground">Great</span>
+            </h2>
+            <p className="text-base text-muted-foreground sm:text-lg max-w-xl mx-auto leading-relaxed">
+              Tell us about your project and we'll outline an architecture plan in our discovery call — free, no commitment.
+            </p>
+          </motion.div>
+
+          <div className="grid lg:grid-cols-5 gap-10 lg:gap-16">
+
+            {/* ── Contact Form ── */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="lg:col-span-3"
+            >
+              {status === "success" ? (
+                <div className="flex flex-col items-center justify-center py-16 px-8 text-center rounded-2xl border border-primary/20 bg-primary/5">
+                  <CheckCircle2 size={48} className="text-primary mb-4" />
+                  <h3 className="text-xl font-bold text-foreground mb-2">Message received!</h3>
+                  <p className="text-muted-foreground text-sm">We'll reply within 24 hours. For urgent enquiries, WhatsApp us directly.</p>
+                  <button onClick={() => setStatus("idle")} className="mt-6 text-xs text-muted-foreground underline hover:text-foreground transition-colors">
+                    Send another message
+                  </button>
                 </div>
-                <span>{label}</span>
-              </a>
-            ))}
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="name" className="block text-xs font-semibold text-muted-foreground mb-1.5 uppercase tracking-wider">Name *</label>
+                      <input
+                        id="name"
+                        name="name"
+                        type="text"
+                        required
+                        value={form.name}
+                        onChange={handleChange}
+                        placeholder="Your name"
+                        className="w-full rounded-lg border border-border bg-background px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="email" className="block text-xs font-semibold text-muted-foreground mb-1.5 uppercase tracking-wider">Email *</label>
+                      <input
+                        id="email"
+                        name="email"
+                        type="email"
+                        required
+                        value={form.email}
+                        onChange={handleChange}
+                        placeholder="you@company.com"
+                        className="w-full rounded-lg border border-border bg-background px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label htmlFor="budget" className="block text-xs font-semibold text-muted-foreground mb-1.5 uppercase tracking-wider">Project Budget</label>
+                    <select
+                      id="budget"
+                      name="budget"
+                      value={form.budget}
+                      onChange={handleChange}
+                      className="w-full rounded-lg border border-border bg-background px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all"
+                    >
+                      <option value="">Select a budget range...</option>
+                      {budgets.map((b) => <option key={b} value={b}>{b}</option>)}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label htmlFor="message" className="block text-xs font-semibold text-muted-foreground mb-1.5 uppercase tracking-wider">Project Details *</label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      required
+                      rows={5}
+                      value={form.message}
+                      onChange={handleChange}
+                      placeholder="Briefly describe what you want to build, automate, or fix..."
+                      className="w-full rounded-lg border border-border bg-background px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all resize-none"
+                    />
+                  </div>
+
+                  {status === "error" && (
+                    <p className="text-xs text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-4 py-3">{errorMsg}</p>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={status === "loading"}
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-foreground px-6 py-3.5 text-sm font-semibold text-background hover:bg-foreground/90 hover:scale-[1.01] transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+                  >
+                    {status === "loading" ? (
+                      <><Loader2 size={16} className="animate-spin" /> Sending...</>
+                    ) : (
+                      <><Send size={15} /> Send Message</>
+                    )}
+                  </button>
+                  <p className="text-center text-xs text-muted-foreground/60">We reply within 24 hours · No spam, ever</p>
+                </form>
+              )}
+            </motion.div>
+
+            {/* ── Quick Links ── */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="lg:col-span-2 space-y-3"
+            >
+              <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-5">Or reach us directly</p>
+              {quickLinks.map(({ href, label, Icon, external }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target={external ? "_blank" : undefined}
+                  rel={external ? "noopener noreferrer" : undefined}
+                  className="group flex items-center gap-3 rounded-lg border border-border bg-background px-5 py-3.5 text-sm font-medium text-foreground transition-all hover:bg-muted hover:border-primary/40"
+                >
+                  <div className="text-muted-foreground group-hover:text-primary transition-colors">
+                    <Icon />
+                  </div>
+                  <span className="truncate">{label}</span>
+                </a>
+              ))}
+
+              <div className="mt-8 p-5 rounded-xl border border-border bg-card/40">
+                <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3">Response time</p>
+                <p className="text-2xl font-bold text-foreground">≤ 24h</p>
+                <p className="text-xs text-muted-foreground mt-1">WhatsApp is fastest · usually under 2 hours</p>
+              </div>
+            </motion.div>
           </div>
         </div>
       </div>
 
+      {/* ── Footer ── */}
       <footer className="container mx-auto mt-24 border-t border-border px-4 pt-10 sm:mt-32 sm:px-6">
-        <p className="text-center text-sm font-medium text-muted-foreground">
-          © 2026 Aurion Stack. All rights reserved. ·{" "}
-          <a href="/services" className="hover:text-foreground transition-colors">Services</a>
-          {" · "}
-          <a href="/pricing" className="hover:text-foreground transition-colors">Pricing</a>
-          {" · "}
-          <a href="/insights" className="hover:text-foreground transition-colors">Insights</a>
-        </p>
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-sm font-medium text-muted-foreground">
+            © {new Date().getFullYear()} Aurion Stack. All rights reserved.
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm text-muted-foreground">
+            {[
+              { label: "Services", href: "/services" },
+              { label: "Pricing", href: "/pricing" },
+              { label: "Solutions", href: "/solutions" },
+              { label: "Insights", href: "/insights" },
+              { label: "Privacy", href: "/privacy" },
+              { label: "Terms", href: "/terms" },
+            ].map(({ label, href }) => (
+              <Link key={label} href={href} className="hover:text-foreground transition-colors">
+                {label}
+              </Link>
+            ))}
+          </div>
+        </div>
       </footer>
     </section>
   );
-};
-
-export default ContactSection;
+}

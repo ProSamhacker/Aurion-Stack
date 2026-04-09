@@ -1,0 +1,13 @@
+{
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/auraiq/page": "/auraiq",
+  "/businesszip/page": "/businesszip",
+  "/gaptuber/page": "/gaptuber",
+  "/insights/page": "/insights",
+  "/page": "/",
+  "/pricing/page": "/pricing",
+  "/services/page": "/services",
+  "/solutions/[slug]/page": "/solutions/[slug]",
+  "/visioscript/page": "/visioscript"
+}

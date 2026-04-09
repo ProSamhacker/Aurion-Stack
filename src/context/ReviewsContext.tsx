@@ -1,5 +1,6 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+"use client";
 
+import { createContext, useContext, useState, ReactNode } from "react";
 export interface Review {
   text: string;
   author: string;
